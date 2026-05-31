@@ -3,27 +3,80 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\PermissionRegistrar;
 
 class UserSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        $user = User::firstOrCreate(
-            ['email' => 'admin@admin.com'],
-            ['name' => 'Super Admin', 'password' => Hash::make('password')]
-        );
-        $user->assignRole('super_admin');
+        app(PermissionRegistrar::class)->forgetCachedPermissions();
 
-        $user = User::firstOrCreate(
-            ['email' => 'user@admin.com'],
-            ['name' => 'User Account', 'password' => Hash::make('password')]
+        $permissions = [
+            'view_any_portfolio_profile',
+            'view_portfolio_profile',
+            'create_portfolio_profile',
+            'update_portfolio_profile',
+            'delete_portfolio_profile',
+            'delete_any_portfolio_profile',
+
+            'view_any_project',
+            'view_project',
+            'create_project',
+            'update_project',
+            'delete_project',
+            'delete_any_project',
+
+            'view_any_contact_message',
+            'view_contact_message',
+            'create_contact_message',
+            'update_contact_message',
+            'delete_contact_message',
+            'delete_any_contact_message',
+        ];
+
+        foreach ($permissions as $permission) {
+            Permission::query()->firstOrCreate([
+                'name' => $permission,
+                'guard_name' => 'web',
+            ]);
+        }
+
+        $superAdminRole = Role::query()->firstOrCreate([
+            'name' => 'super_admin',
+            'guard_name' => 'web',
+        ]);
+
+        $adminRole = Role::query()->firstOrCreate([
+            'name' => 'admin',
+            'guard_name' => 'web',
+        ]);
+
+        $allPermissions = Permission::query()
+            ->where('guard_name', 'web')
+            ->get();
+
+        $superAdminRole->syncPermissions($allPermissions);
+        $adminRole->syncPermissions($allPermissions);
+
+        $user = User::query()->updateOrCreate(
+            [
+                'email' => 'admin@admin.com',
+            ],
+            [
+                'name' => 'Admin',
+                'password' => 'password',
+                'email_verified_at' => now(),
+            ]
         );
-        $user->assignRole('user');
+
+        $user->syncRoles([
+            $superAdminRole,
+            $adminRole,
+        ]);
+
+        app(PermissionRegistrar::class)->forgetCachedPermissions();
     }
 }

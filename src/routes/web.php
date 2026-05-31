@@ -1,23 +1,15 @@
 <?php
 
+use App\Livewire\Pages\ContactPage;
+use App\Livewire\Pages\HomePage;
+use App\Livewire\Pages\ProjectDetailPage;
+use App\Livewire\Pages\ProjectsPage;
 use Illuminate\Support\Facades\Route;
-use Livewire\Livewire;
-use Illuminate\Support\Facades\Response;
 
-/* NOTE: Do Not Remove
-/ Livewire asset handling if using sub folder in domain
-*/
+Route::get('/', HomePage::class)->name('home');
 
-Livewire::setUpdateRoute(function ($handle) {
-    return Route::post(config('app.asset_prefix') . '/livewire/update', $handle);
-});
+Route::get('/projects', ProjectsPage::class)->name('projects.index');
 
-Livewire::setScriptRoute(function ($handle) {
-    return Route::get(config('app.asset_prefix') . '/livewire/livewire.js', $handle);
-});
-/*
-/ END
-*/
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/projects/{project:slug}', ProjectDetailPage::class)->name('projects.show');
+
+Route::get('/contact', ContactPage::class)->name('contact');
