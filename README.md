@@ -18,32 +18,6 @@ Aplikasi ini dibangun menggunakan **Laravel**, **Livewire**, **Blade**, **Filame
 
 ---
 
-## 📸 Screenshot & Demo
-
-### 🏠 Home Page
-
-![Home Page](docs/screenshots/home.png)
-
-### 📂 Projects Page
-
-![Projects Page](docs/screenshots/projects.png)
-
-### 📄 Project Detail Page
-
-![Project Detail Page](docs/screenshots/project-detail.png)
-
-### 📬 Contact Page
-
-![Contact Page](docs/screenshots/contact.png)
-
-### 🔧 Admin Panel
-
-![Admin Panel](docs/screenshots/admin.png)
-
-> 🔗 **Live Demo**: Jalankan secara lokal menggunakan panduan instalasi di bawah.
-
----
-
 ## 🎯 Tujuan Pembuatan
 
 1. ✅ Memenuhi project UTS Pemrograman Web
